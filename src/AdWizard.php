@@ -119,14 +119,18 @@ class AdWizard extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             static function(RegisterUrlRulesEvent $event) {
-                // Field Layouts
-                $event->rules['ad-wizard/fieldlayouts']                     = 'ad-wizard/field-layouts';
-                $event->rules['ad-wizard/fieldlayouts/new']                 = 'ad-wizard/field-layouts/edit-field-layout';
-                $event->rules['ad-wizard/fieldlayouts/<fieldLayoutId:\d+>'] = 'ad-wizard/field-layouts/edit-field-layout';
-                // Groups
-                $event->rules['ad-wizard/groups']               = 'ad-wizard/ad-groups';
-                $event->rules['ad-wizard/groups/new']           = 'ad-wizard/ad-groups/edit-ad-group';
-                $event->rules['ad-wizard/groups/<groupId:\d+>'] = 'ad-wizard/ad-groups/edit-ad-group';
+                if (Craft::$app->getUser()->getIsAdmin()) {
+                    // Field Layouts
+                    $event->rules['ad-wizard/fieldlayouts'] = 'ad-wizard/field-layouts';
+                    $event->rules['ad-wizard/fieldlayouts/new'] = 'ad-wizard/field-layouts/edit-field-layout';
+                    $event->rules['ad-wizard/fieldlayouts/<fieldLayoutId:\d+>'] = 'ad-wizard/field-layouts/edit-field-layout';
+
+                    // Groups
+                    $event->rules['ad-wizard/groups'] = 'ad-wizard/ad-groups';
+                    $event->rules['ad-wizard/groups/new'] = 'ad-wizard/ad-groups/edit-ad-group';
+                    $event->rules['ad-wizard/groups/<groupId:\d+>'] = 'ad-wizard/ad-groups/edit-ad-group';
+                }
+
                 // Ads
                 $event->rules['ad-wizard/ads']                                   = 'ad-wizard/ads';
                 $event->rules['ad-wizard/ads/new']                               = 'ad-wizard/ads/edit-ad';
@@ -174,8 +178,11 @@ class AdWizard extends Plugin
         if ($groupsExist) {
             $item['subnav']['ads'] = ['label' => 'Ads', 'url' => 'ad-wizard/ads'];
         }
-        $item['subnav']['groups'] = ['label' => 'Groups', 'url' => 'ad-wizard/groups'];
-        $item['subnav']['fieldlayouts'] = ['label' => 'Field Layouts', 'url' => 'ad-wizard/fieldlayouts'];
+
+        if (Craft::$app->getUser()->getIsAdmin()) {
+            $item['subnav']['groups'] = ['label' => 'Groups', 'url' => 'ad-wizard/groups'];
+            $item['subnav']['fieldlayouts'] = ['label' => 'Field Layouts', 'url' => 'ad-wizard/fieldlayouts'];
+        }
 
         return $item;
     }
