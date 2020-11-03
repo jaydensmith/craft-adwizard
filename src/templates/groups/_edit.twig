@@ -54,7 +54,7 @@
             label: "Field Layout"|t('ad-wizard'),
             id: 'fieldLayoutId',
             name: 'fieldLayoutId',
-            value: group.fieldLayoutId,
+            value: group.id ? group.fieldLayoutId : (fieldLayoutOptions | keys | filter | first),
             options: fieldLayoutOptions,
         }) }}
 
