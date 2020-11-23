@@ -6,9 +6,6 @@ var adWizard = {
         var data = {'id':id};
         data[window.csrfTokenName] = window.csrfTokenValue; // Append CSRF Token
 
-        // Open link in new window
-        window.open(url);
-
         // Tally click
         window.superagent
             .post('/actions/ad-wizard/tracking/click')
@@ -18,6 +15,8 @@ var adWizard = {
             .end(function (response) {
                 var message = JSON.parse(response.text);
                 console.log(message);
+
+                window.location.href = url;
             })
         ;
 
